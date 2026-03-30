@@ -1,0 +1,1401 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Project Supernatural</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+        --green-dark: #0a3d1f;
+        --green-mid: #1a7a3c;
+        --green-bright: #2ecc71;
+        --green-light: #a8f0c0;
+        --white: #f9fefe;
+        --gray: #e8f5ec;
+        }
+        html { scroll-behavior: smooth; margin: 0; padding: 0; width: 100%; }
+        body { font-family: 'Inter', sans-serif; background: #0d0d0d; color: #f0f0f0; line-height: 1.65; overflow-x: hidden; font-size: 16px; width: 100%; margin: 0; padding: 0; }
+
+        /* ── SCROLL FADE-IN ── */
+        .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── HERO ── */
+        #title-page {
+        min-height: 100vh; width: 100%;
+        background: linear-gradient(135deg, #071a0e 0%, #0a2e18 45%, #0f4523 100%);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 60px 30px; position: relative; overflow: hidden;
+        }
+        #title-page::before {
+        content: '';
+        position: absolute; width: 700px; height: 700px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(46,204,113,0.10) 0%, transparent 70%);
+        top: -160px; left: -160px;
+        animation: pulse 6s infinite ease-in-out;
+        }
+        #title-page::after {
+        content: '';
+        position: absolute; width: 600px; height: 600px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(46,204,113,0.08) 0%, transparent 70%);
+        bottom: -120px; right: -120px;
+        animation: pulse 8s infinite ease-in-out reverse;
+        }
+        @keyframes pulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.25);opacity:1} }
+
+        /* particles */
+        .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+        .particle {
+        position: absolute; border-radius: 50%; background: var(--green-bright);
+        opacity: 0; animation: floatUp linear infinite;
+        }
+        .particle.large { background: radial-gradient(circle, rgba(46,204,113,0.85), transparent); }
+        @keyframes floatUp {
+        0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+        10%  { opacity: 0.6; }
+        90%  { opacity: 0.25; }
+        100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        .badge {
+        font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+        color: var(--green-bright); background: rgba(46,204,113,0.08);
+        border: 1px solid rgba(46,204,113,0.25); border-radius: 50px;
+        padding: 6px 18px; margin-bottom: 24px; display: inline-block;
+        position: relative; z-index: 1;
+        animation: fadeDown 0.8s ease both;
+        }
+        @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+
+        #title-page h1 {
+        font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 900;
+        letter-spacing: -0.02em; line-height: 1.05; color: #fff;
+        position: relative; z-index: 1;
+        text-shadow: 0 0 40px rgba(46,204,113,0.2);
+        animation: fadeDown 0.9s 0.1s ease both;
+        }
+        #title-page h1 span { color: var(--green-bright); }
+
+        .subtitle {
+        max-width: 620px; font-size: 1.1rem; font-weight: 300;
+        color: rgba(255,255,255,0.6); margin: 20px auto 36px;
+        position: relative; z-index: 1;
+        animation: fadeDown 0.9s 0.2s ease both;
+        }
+
+        /* stats strip */
+        .hero-stats {
+        display: flex; align-items: center; flex-wrap: wrap; justify-content: center;
+        gap: 0 20px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(46,204,113,0.15);
+        border-radius: 18px; padding: 18px 40px;
+        margin: 0 0 30px; backdrop-filter: blur(10px);
+        position: relative; z-index: 1;
+        animation: fadeDown 1s 0.3s ease both;
+        box-shadow: none;
+        }
+        .hero-stat { display: flex; flex-direction: column; align-items: center; padding: 0 20px; }
+        .hstat-num {
+        font-size: 1.9rem; font-weight: 900; color: var(--green-bright); line-height: 1.1;
+        animation: countPop 0.6s ease both;
+        }
+        @keyframes countPop { 0%{transform:scale(0.7);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+        .hstat-label {
+        font-size: 0.7rem; color: rgba(255,255,255,0.5);
+        text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; text-align: center;
+        }
+        .hstat-divider { width: 1px; height: 40px; background: rgba(46,204,113,0.25); }
+
+        /* buttons */
+        .hero-btns {
+        display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: center;
+        position: relative; z-index: 1; margin-bottom: 28px;
+        animation: fadeDown 1s 0.4s ease both;
+        }
+        .btn-primary {
+        background: var(--green-bright); color: #0a3d1f; font-weight: 700; font-size: 1rem;
+        padding: 16px 48px; border: none; border-radius: 50px; cursor: pointer;
+        transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(46,204,113,0.2);
+        text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        .btn-primary:hover { background: #fff; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(46,204,113,0.3); }
+        .btn-ghost {
+        background: transparent; color: rgba(255,255,255,0.85);
+        border: 1.5px solid rgba(255,255,255,0.3); font-weight: 600; font-size: 0.95rem;
+        padding: 15px 36px; border-radius: 50px; cursor: pointer; transition: all 0.3s ease;
+        letter-spacing: 0.05em;
+        }
+        .btn-ghost:hover { border-color: var(--green-bright); color: var(--green-bright); background: rgba(46,204,113,0.06); }
+        .btn-quiz {
+        background: linear-gradient(135deg, #2ecc71, #1a9e52);
+        color: #fff;
+        font-weight: 800; font-size: 1rem;
+        padding: 16px 40px; border: none; border-radius: 50px; cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 24px rgba(46,204,113,0.35);
+        letter-spacing: 0.05em;
+        animation: quizPulse 2.5s ease infinite;
+        }
+        .btn-quiz:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 10px 36px rgba(46,204,113,0.55); }
+        @keyframes quizPulse {
+        0%,100%{ box-shadow: 0 4px 24px rgba(46,204,113,0.35); }
+        50%{ box-shadow: 0 4px 36px rgba(46,204,113,0.65), 0 0 0 6px rgba(46,204,113,0.1); }
+        }
+
+        /* tags */
+        .tag-row {
+        display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        margin-bottom: 36px; position: relative; z-index: 1;
+        animation: fadeDown 1s 0.5s ease both;
+        }
+        .tag {
+        font-size: 0.78rem; color: rgba(255,255,255,0.82);
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 50px; padding: 7px 16px; transition: all 0.3s;
+        cursor: pointer;
+        }
+        .tag:hover { background: rgba(46,204,113,0.14); border-color: rgba(46,204,113,0.4); color: var(--green-bright); transform: translateY(-2px); }
+
+        .scroll-hint {
+        position: absolute; bottom: 30px;
+        font-size: 0.75rem; color: rgba(255,255,255,0.35);
+        letter-spacing: 0.1em; animation: bounce 2s infinite;
+        z-index: 1;
+        }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+        /* ── SECTIONS ── */
+        section { padding: 90px clamp(30px, 5vw, 120px); max-width: 100%; margin: 0 auto; width: 100%; }
+        .section-label {
+        font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+        color: var(--green-bright); margin-bottom: 12px; display: block;
+        }
+        h2 {
+        font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: #fff;
+        margin-bottom: 20px; line-height: 1.15;
+        }
+        h2 em { font-style: normal; color: var(--green-bright); }
+        .divider {
+        width: 60px; height: 4px;
+        background: linear-gradient(90deg, var(--green-bright), transparent);
+        border-radius: 2px; margin-bottom: 36px;
+        transition: width 0.6s ease;
+        }
+        section:hover .divider { width: 120px; }
+        p.lead { font-size: 1.1rem; color: rgba(255,255,255,0.88); max-width: 900px; line-height: 1.75; }
+
+        /* ── SECTION BGs ── */
+        #whoarewe-wrap { background: #111; width: 100%; }
+        #intro-wrap { background: #0d0d0d; width: 100%; }
+        #aims-wrap { background: #0c1f10; width: 100%; }
+        #problem-wrap { background: #111; width: 100%; }
+        #activities-wrap { background: #0d0d0d; width: 100%; }
+        #initiatives-wrap { background: #0c1f10; width: 100%; }
+        #conclusion-wrap { background: linear-gradient(135deg, #0a3d1f, #1a7a3c); width: 100%; }
+
+        /* ── AIMS GRID ── */
+        .aims-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px; margin-top: 40px; width: 100%;
+        }
+        .aim-card {
+        background: #1a1a1a; border: 1px solid rgba(46,204,113,0.15);
+        border-radius: 20px; padding: 32px 28px;
+        position: relative; overflow: hidden;
+        transition: transform 0.35s, box-shadow 0.35s, border-color 0.35s;
+        }
+        .aim-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 40px rgba(46,204,113,0.2);
+        border-color: rgba(46,204,113,0.45);
+        }
+        .aim-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, transparent, var(--green-bright), transparent);
+        }
+        .aim-icon {
+        font-size: 2.2rem; margin-bottom: 16px; display: block;
+        }
+        .aim-card h3 {
+        font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px; line-height: 1.35;
+        }
+        .aim-card p {
+        font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.65;
+        }
+
+        /* ── WORKSHOP CARD ── */
+        .workshop-card {
+        background: #1a1a1a; border: 1px solid rgba(46,204,113,0.2);
+        border-radius: 24px; padding: 44px 40px; margin-top: 40px;
+        position: relative; overflow: hidden;
+        transition: box-shadow 0.4s;
+        width: 100%;
+        }
+        .workshop-card:hover { box-shadow: 0 0 50px rgba(46,204,113,0.15); }
+        .workshop-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, transparent, var(--green-bright), transparent);
+        }
+        .workshop-badge {
+        display: inline-block; font-size: 0.72rem; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--green-bright);
+        background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.25);
+        border-radius: 50px; padding: 5px 16px; margin-bottom: 18px;
+        }
+        .workshop-card h3 {
+        font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 12px;
+        }
+        .workshop-card > p {
+        font-size: 1rem; color: rgba(255,255,255,0.78); line-height: 1.7;
+        max-width: 800px; margin-bottom: 28px;
+        }
+        .workshop-steps {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 18px; width: 100%;
+        }
+        .ws-step {
+        background: rgba(46,204,113,0.06); border: 1px solid rgba(46,204,113,0.15);
+        border-radius: 16px; padding: 22px 20px;
+        display: flex; gap: 14px; align-items: flex-start;
+        transition: border-color 0.3s, background 0.3s;
+        }
+        .ws-step:hover { border-color: rgba(46,204,113,0.4); background: rgba(46,204,113,0.1); }
+        .ws-step-num {
+        flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+        background: rgba(46,204,113,0.15); border: 2px solid var(--green-bright);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.8rem; color: var(--green-bright);
+        }
+        .ws-step-text {
+        font-size: 0.9rem; color: rgba(255,255,255,0.82); line-height: 1.55;
+        }
+
+        /* ── TEAM GRID ── */
+        .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 28px; margin-top: 40px;
+        width: 100%;
+        }
+        .member-card {
+        background: #1a1a1a;
+        border: 1px solid rgba(46,204,113,0.15);
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.35s, box-shadow 0.35s, border-color 0.35s;
+        }
+        .member-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 48px rgba(46,204,113,0.25);
+        border-color: rgba(46,204,113,0.5);
+        }
+        /* keep card hovered while scrolling the inner panel */
+        .member-card .member-hover-info {
+        pointer-events: none;
+        }
+        .member-card:hover .member-hover-info {
+        pointer-events: auto;
+        }
+        .member-top { padding: 28px 20px 16px; text-align: center; }
+        .member-photo {
+        width: 90px; height: 90px; border-radius: 50%;
+        background: linear-gradient(135deg, #1a7a3c, #0a3d1f);
+        border: 3px dashed rgba(46,204,113,0.4);
+        margin: 0 auto 14px;
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden; position: relative;
+        }
+        .member-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .member-photo .photo-placeholder { font-size: 0.6rem; color: rgba(255,255,255,0.35); text-align: center; padding: 6px; }
+        .member-name { font-size: 0.95rem; font-weight: 600; color: #fff; }
+        .member-role { font-size: 0.78rem; color: var(--green-bright); margin-top: 4px; }
+
+        /* hover dropdown */
+        .member-hover-info {
+  max-height: none;
+  overflow: visible;
+  background: rgba(46,204,113,0.08);
+  border-top: 1px solid rgba(46,204,113,0.15);
+  padding: 16px 20px 18px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.6;
+}
+        .member-hover-info ul { padding-left: 14px; margin-top: 8px; }
+        .member-hover-info li { margin-bottom: 6px; }
+        .hover-label {
+        font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+        color: var(--green-bright); margin-bottom: 8px; display: block;
+        }
+
+        /* ── PROBLEM ── */
+        .stat-box {
+        background: #1a1a1a; border: 1px solid rgba(46,204,113,0.2);
+        border-radius: 20px; padding: 36px; margin: 40px 0; text-align: center;
+        position: relative; overflow: hidden;
+        transition: box-shadow 0.4s;
+        }
+        .stat-box:hover { box-shadow: 0 0 50px rgba(46,204,113,0.15); }
+        .stat-box::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, transparent, var(--green-bright), transparent);
+        }
+        .stat-teaser { font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 20px; }
+        .btn-reveal {
+        background: transparent; color: var(--green-bright);
+        border: 2px solid var(--green-bright); padding: 13px 36px;
+        border-radius: 50px; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+        transition: all 0.3s; letter-spacing: 0.08em;
+        }
+        .btn-reveal:hover { background: var(--green-bright); color: #0a3d1f; transform: scale(1.04); }
+        .stat-reveal { display: none; animation: fadeIn 0.6s ease; }
+        .stat-reveal.visible { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+        .stat-number {
+        font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 900; color: var(--green-bright);
+        line-height: 1; text-shadow: 0 0 50px rgba(46,204,113,0.6);
+        }
+        .stat-desc { font-size: 1rem; color: rgba(255,255,255,0.82); margin: 10px auto 0; max-width: 500px; }
+        .stat-source { font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-top: 14px; }
+
+        /* ── TIMELINE ── */
+        .timeline { position: relative; margin-top: 50px; width: 100%; }
+        .timeline::before {
+        content: ''; position: absolute; left: 28px; top: 0; bottom: 0; width: 2px;
+        background: linear-gradient(to bottom, var(--green-bright), transparent);
+        }
+        .timeline-item { display: flex; gap: 28px; margin-bottom: 36px; align-items: flex-start; }
+        .tl-dot {
+        flex-shrink: 0; width: 58px; height: 58px; border-radius: 50%;
+        background: #1a1a1a; border: 2px solid var(--green-bright);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.85rem; color: var(--green-bright);
+        position: relative; z-index: 1;
+        transition: background 0.3s, box-shadow 0.3s;
+        }
+        .timeline-item:hover .tl-dot {
+        background: rgba(46,204,113,0.08);
+        box-shadow: 0 0 24px rgba(46,204,113,0.4);
+        }
+        .tl-content {
+        flex: 1; background: #1a1a1a; border: 1px solid rgba(46,204,113,0.15);
+        border-radius: 16px; padding: 22px 26px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .tl-content:hover { border-color: rgba(46,204,113,0.4); box-shadow: 0 8px 32px rgba(46,204,113,0.1); }
+        .tl-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .tl-title { font-size: 1rem; font-weight: 700; color: #fff; }
+        .tl-date {
+        font-size: 0.75rem; color: var(--green-bright);
+        background: rgba(46,204,113,0.1); padding: 4px 12px; border-radius: 20px;
+        }
+        .btn-tl {
+        margin-top: 14px; background: transparent; color: var(--green-bright);
+        border: 1.5px solid rgba(46,204,113,0.4); padding: 9px 22px;
+        border-radius: 50px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+        transition: all 0.3s;
+        }
+        .btn-tl:hover { background: rgba(46,204,113,0.1); border-color: var(--green-bright); transform: translateX(4px); }
+        .tl-details {
+        display: none; margin-top: 14px; font-size: 0.9rem; color: rgba(255,255,255,0.78);
+        border-top: 1px solid rgba(46,204,113,0.1); padding-top: 14px;
+        animation: fadeIn 0.5s ease;
+        }
+        .tl-details.visible { display: block; }
+
+        /* ── CONCLUSION ── */
+        #conclusion-wrap { text-align: center; width: 100%; }
+        #conclusion-wrap section { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .thank-you {
+        font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 900; color: #fff;
+        text-shadow: 0 0 80px rgba(46,204,113,0.5); margin-bottom: 16px;
+        animation: glowPulse 3s ease infinite;
+        }
+        @keyframes glowPulse {
+        0%,100%{ text-shadow: 0 0 60px rgba(46,204,113,0.4); }
+        50%{ text-shadow: 0 0 100px rgba(46,204,113,0.8), 0 0 30px rgba(46,204,113,0.4); }
+        }
+        .conclusion-sub { font-size: 1rem; color: rgba(255,255,255,0.82); max-width: 500px; margin-bottom: 40px; }
+        .footer-note { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 20px; }
+
+        /* ── TAG DEFINITIONS MODAL ── */
+        #def-modal {
+        display: none;
+        position: fixed; inset: 0; z-index: 9999;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(6px);
+        align-items: center; justify-content: center;
+        }
+        #def-modal.open { display: flex; animation: modalBg 0.3s ease; }
+        @keyframes modalBg { from{opacity:0} to{opacity:1} }
+
+        .def-card {
+        background: #121f15;
+        border: 1px solid rgba(46,204,113,0.35);
+        border-radius: 24px;
+        padding: 42px 40px 36px;
+        max-width: 420px; width: 90%;
+        text-align: center;
+        position: relative;
+        animation: cardPop 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+        box-shadow: 0 0 60px rgba(46,204,113,0.15);
+        }
+        @keyframes cardPop { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+
+        .def-close {
+        position: absolute; top: 14px; right: 18px;
+        background: none; border: none; color: rgba(255,255,255,0.35);
+        font-size: 1.1rem; cursor: pointer; transition: color 0.2s;
+        }
+        .def-close:hover { color: var(--green-bright); }
+
+        .def-icon { font-size: 2.8rem; display: block; margin-bottom: 14px; }
+
+        .def-card h3 {
+        font-size: 1.25rem; font-weight: 800; color: var(--green-bright);
+        margin-bottom: 14px; letter-spacing: -0.01em;
+        }
+        .def-card p {
+        font-size: 0.95rem; color: rgba(255,255,255,0.72);
+        line-height: 1.65;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+        .team-grid { grid-template-columns: 1fr 1fr; }
+        .timeline::before { display: none; }
+        .hero-stats { padding: 14px 16px; }
+        .hstat-divider { display: none; }
+        }
+
+        /* ══════════════════ QUIZ OVERLAY ══════════════════ */
+        #quiz-overlay {
+        display: none;
+        position: fixed; inset: 0; z-index: 10000;
+        background: #0d1f12;
+        overflow-y: auto;
+        animation: quizSlideIn 0.4s ease;
+        }
+        #quiz-overlay.open { display: flex; }
+        @keyframes quizSlideIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        .quiz-close-btn {
+        position: fixed; top: 20px; right: 24px; z-index: 10001;
+        background: rgba(46,204,113,0.15); border: 1px solid rgba(46,204,113,0.35);
+        color: #fff; font-size: 1.1rem; font-weight: 700;
+        width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+        display: none; align-items: center; justify-content: center;
+        transition: background 0.2s;
+        }
+        .quiz-close-btn:hover { background: rgba(46,204,113,0.3); }
+        #quiz-overlay.open ~ .quiz-close-btn,
+        .quiz-close-btn.visible { display: flex; }
+        /* Scoped quiz styles */
+        :root {
+        --green: #2ecc71; --green-dark: #1a9e52; --bg: #0d1f12;
+        --card: #132218; --border: rgba(46,204,113,0.25);
+        --text: rgba(255,255,255,0.88); --muted: rgba(255,255,255,0.5);
+        }
+        #quiz-overlay.open {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        flex-direction: column; align-items: center;
+        padding: 40px 20px 80px;
+        }
+
+        /* header */
+        .quiz-header {
+        text-align: center; margin-bottom: 40px;
+        }
+        .quiz-badge {
+        display: inline-block; font-size: 0.72rem; letter-spacing: 0.25em;
+        text-transform: uppercase; color: var(--green);
+        background: rgba(46,204,113,0.1); border: 1px solid var(--border);
+        border-radius: 50px; padding: 5px 16px; margin-bottom: 14px;
+        }
+        .quiz-header h1 {
+        font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900;
+        color: #fff; margin-bottom: 8px;
+        }
+        .quiz-header h1 span { color: var(--green); }
+        .quiz-header p { font-size: 0.95rem; color: var(--muted); }
+
+        /* progress bar */
+        .progress-wrap {
+        width: 100%; max-width: 780px; margin-bottom: 32px;
+        }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
+        .progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; }
+        .progress-fill {
+        height: 100%; background: linear-gradient(90deg, var(--green), #a8f0c0);
+        border-radius: 6px; transition: width 0.5s ease;
+        }
+
+        /* card */
+        .q-card {
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: 28px; padding: 44px 52px; max-width: 780px; width: 100%;
+        display: none; animation: cardIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        .q-card.active { display: block; }
+        @keyframes cardIn { from{opacity:0;transform:translateY(24px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+        .q-num {
+        font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+        color: var(--green); margin-bottom: 10px; display: block;
+        }
+        .q-title {
+        font-size: 1.2rem; font-weight: 800; color: #fff; line-height: 1.45; margin-bottom: 8px;
+        }
+        .q-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 24px; font-style: italic; }
+
+        /* illustration */
+        .q-illustration {
+        width: 100%; max-width: 340px; margin: 0 auto 28px;
+        display: block; border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(46,204,113,0.05);
+        overflow: hidden; aspect-ratio: 4/3;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 7rem; line-height: 1;
+        }
+
+        /* options */
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        .opt {
+        background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1);
+        border-radius: 14px; padding: 14px 20px; cursor: pointer;
+        font-size: 0.95rem; font-weight: 600; color: var(--text);
+        transition: all 0.25s; display: flex; align-items: center; gap: 12px;
+        text-align: left;
+        }
+        .opt:hover { background: rgba(46,204,113,0.1); border-color: var(--green); }
+        .opt.selected { background: rgba(46,204,113,0.18); border-color: var(--green); color: #fff; }
+        .opt.correct { background: rgba(46,204,113,0.25); border-color: var(--green); color: #fff; }
+        .opt.wrong { background: rgba(231,76,60,0.18); border-color: rgba(231,76,60,0.6); color: rgba(255,255,255,0.7); }
+        .opt-letter {
+        flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+        background: rgba(255,255,255,0.08); display: flex; align-items: center;
+        justify-content: center; font-size: 0.78rem; font-weight: 800; color: var(--green);
+        }
+
+        /* multi-select hint */
+        .multi-hint {
+        font-size: 0.78rem; color: var(--muted); margin-bottom: 14px;
+        background: rgba(46,204,113,0.07); border: 1px solid var(--border);
+        border-radius: 10px; padding: 8px 14px; display: inline-block;
+        }
+
+        /* explanation box */
+        .explanation {
+        display: none; background: rgba(46,204,113,0.07);
+        border: 1px solid rgba(46,204,113,0.25); border-radius: 14px;
+        padding: 16px 20px; margin-bottom: 20px;
+        font-size: 0.88rem; color: rgba(255,255,255,0.78); line-height: 1.6;
+        animation: fadeIn 0.4s ease;
+        }
+        .explanation.show { display: block; }
+        .explanation strong { color: var(--green); }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+        /* nav buttons */
+        .q-nav { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn-next {
+        background: linear-gradient(135deg, var(--green), var(--green-dark));
+        color: #fff; font-weight: 800; font-size: 0.95rem;
+        padding: 14px 36px; border: none; border-radius: 50px; cursor: pointer;
+        transition: all 0.25s; box-shadow: 0 4px 18px rgba(46,204,113,0.3);
+        }
+        .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(46,204,113,0.45); }
+        .btn-next:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+        .btn-check {
+        background: transparent; color: var(--green);
+        border: 1.5px solid var(--green); font-weight: 700; font-size: 0.9rem;
+        padding: 13px 28px; border-radius: 50px; cursor: pointer; transition: all 0.25s;
+        }
+        .btn-check:hover { background: rgba(46,204,113,0.1); }
+        .btn-check:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* score card */
+        #score-card {
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: 28px; padding: 60px 60px; max-width: 780px; width: 100%;
+        text-align: center; display: none;
+        animation: cardIn 0.5s ease both;
+        }
+        .score-emoji { font-size: 5rem; margin-bottom: 16px; display: block; }
+        .score-title { font-size: 2rem; font-weight: 900; color: var(--green); margin-bottom: 8px; }
+        .score-pts { font-size: 1.1rem; color: var(--muted); margin-bottom: 20px; }
+        .score-desc { font-size: 1rem; color: var(--text); max-width: 480px; margin: 0 auto 36px; line-height: 1.6; }
+        .score-bar-wrap { margin: 0 auto 36px; max-width: 320px; }
+        .score-bar-bg { height: 12px; background: rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; }
+        .score-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), #a8f0c0); border-radius: 8px; transition: width 1s ease; }
+        .btn-restart {
+        background: linear-gradient(135deg, var(--green), var(--green-dark));
+        color: #fff; font-weight: 800; font-size: 1rem;
+        padding: 16px 48px; border: none; border-radius: 50px; cursor: pointer;
+        box-shadow: 0 4px 22px rgba(46,204,113,0.35); transition: all 0.3s;
+        }
+        .btn-restart:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(46,204,113,0.5); }
+
+        /* confetti blobs */
+        .confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+        .blob {
+        position: absolute; top: -20px; border-radius: 50%;
+        animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+        to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+    </head>
+    <body>
+
+    <!-- ══════════════════ TITLE PAGE ══════════════════ -->
+    <div id="title-page">
+    <div class="particles" id="particles"></div>
+
+    <span class="badge">🌿 Environmental Awareness Campaign</span>
+    <h1>Project <span>Super&shy;natural</span></h1>
+    <p class="subtitle">
+        Increasing awareness about harmful chemicals hiding in everyday products
+        and empowering communities to choose ethical, environment-friendly, and safe alternatives.
+    </p>
+
+    <div class="hero-stats">
+        <div class="hero-stat">
+        <span class="hstat-num" data-target="2026">0</span>
+        <span class="hstat-label">Initiated</span>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hero-stat">
+        <span class="hstat-num" data-target="2">0</span>
+        <span class="hstat-label">Workshops Planned</span>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hero-stat">
+        <span class="hstat-num" data-target="4">0</span>
+        <span class="hstat-label">Team Members</span>
+        </div>
+        <!-- <div class="hstat-divider"></div>
+        <div class="hero-stat">
+        <span class="hstat-num" data-target="Boost Awareness">0</span>
+        <span class="hstat-label">Goals</span>
+        </div> -->
+    </div>
+
+    <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('whoarewe-wrap').scrollIntoView({behavior:'smooth'})">
+        Start ↓
+        </button>
+        <button class="btn-ghost" onclick="document.getElementById('problem-wrap').scrollIntoView({behavior:'smooth'})">
+        See the Problem
+        </button>
+        <button class="btn-quiz" onclick="openQuiz()">
+        🧫 Take the Quiz!
+        </button>
+    </div>
+
+    <div class="tag-row">
+        <span class="tag" onclick="openDef('chem')">🧪 Chemical Transparency</span>
+        <span class="tag" onclick="openDef('eco')">♻️ Eco-Friendly Choices</span>
+        <span class="tag" onclick="openDef('safety')">🛡️ Consumer Safety</span>
+        <span class="tag" onclick="openDef('ethical')">🌍 Ethical Products</span>
+    </div>
+
+    <!-- Definition Modal -->
+    <div id="def-modal" onclick="closeDef(event)">
+        <div class="def-card" id="def-card">
+        <button class="def-close" onclick="closeDef(null, true)">✕</button>
+        <span class="def-icon" id="def-icon"></span>
+        <h3 id="def-title"></h3>
+        <p id="def-body"></p>
+        </div>
+    </div>
+
+    <span class="scroll-hint">↓ scroll to explore</span>
+    </div>
+
+    <!-- ══════════════════ WHO ARE WE ══════════════════ -->
+    <div id="whoarewe-wrap">
+    <section id="whoarewe">
+        <span class="section-label reveal">01: About Us</span>
+        <h2 class="reveal">Who <em>Are We?</em></h2>
+        <div class="divider reveal"></div>
+        <p class="lead reveal">
+        We are a Y3 SVIA team aiming to raise awareness of harmful chemicals and materials in everyday consumer products, and to educate and guide those unaware or unsure on making safer, more sustainable choices.
+        </p>
+    </section>
+    </div>
+
+    <!-- ══════════════════ AIMS & OBJECTIVES ══════════════════ -->
+    <div id="aims-wrap">
+    <section id="aims">
+        <span class="section-label reveal">02: Our Mission</span>
+        <h2 class="reveal">Aims &amp; <em>Objectives</em></h2>
+        <div class="divider reveal"></div>
+        <div class="aims-grid">
+
+        <div class="aim-card reveal">
+            <span class="aim-icon">🔍</span>
+            <h3>Identify Greenwashing &amp; Misleading Claims</h3>
+            <p>Increase awareness of the hidden harmful chemicals in everyday products by developing the ability to identify greenwashing, fast fashion and misleading claims.</p>
+        </div>
+
+        <div class="aim-card reveal">
+            <span class="aim-icon">🛁</span>
+            <h3>Conscious &amp; Responsible Consumers</h3>
+            <p>Encourage students to become more conscious and responsible consumers who understand what goes into the products they use daily.</p>
+        </div>
+
+        <div class="aim-card reveal">
+            <span class="aim-icon">🧠</span>
+            <h3>Critical Thinking</h3>
+            <p>Encourage critical thinking when evaluating everyday products by questioning labels, ingredients, and marketing tactics.</p>
+        </div>
+
+        <div class="aim-card reveal">
+            <span class="aim-icon">🌍</span>
+            <h3>Protect “Our Planet”</h3>
+            <p>Promote a sense of responsibility and ownership in protecting “Our Planet” through informed, sustainable choices.</p>
+        </div>
+
+        </div>
+    </section>
+    </div>
+
+    <!-- ══════════════════ UPCOMING ACTIVITIES ══════════════════ -->
+    <div id="activities-wrap">
+    <section id="activities">
+        <span class="section-label reveal">03: Get Involved</span>
+        <h2 class="reveal">Upcoming <em>Activities</em></h2>
+        <div class="divider reveal"></div>
+        <p class="lead reveal">
+        Hands-on experiences designed to empower you with practical knowledge.
+        </p>
+
+        <div class="workshop-card reveal">
+        <span class="workshop-badge">🧪 HUSH-STEM Week Workshop</span>
+        <h3>DIY Essential Oil &amp; Hand Sanitiser</h3>
+        <p>
+            Would you like to make your own customised essential oil and hand sanitiser? Well now you can! During HUSH-STEM week, we will be organising a workshop to do just that.
+        </p>
+        <div class="workshop-steps">
+            <div class="ws-step">
+            <div class="ws-step-num">01</div>
+            <div class="ws-step-text">Prepare materials for essential oils. Choose your ingredients from a wide range of herbs</div>
+            </div>
+            <div class="ws-step">
+            <div class="ws-step-num">02</div>
+            <div class="ws-step-text">Use simple distillation to filter out materials needed and make essential oil</div>
+            </div>
+            <div class="ws-step">
+            <div class="ws-step-num">03</div>
+            <div class="ws-step-text">Using products from the distillation to make hand sanitiser</div>
+            </div>
+            <div class="ws-step">
+            <div class="ws-step-num">04</div>
+            <div class="ws-step-text">Reflect on what you’ve learned about natural ingredients and chemical safety</div>
+            </div>
+        </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- ══════════════════ INTRODUCTION ══════════════════ -->
+    <div id="intro-wrap">
+    <section id="introduction">
+        <span class="section-label reveal">04: The Team</span>
+        <h2 class="reveal">Meet the <em>Team</em></h2>
+        <div class="divider reveal"></div>
+        <p class="lead reveal">
+        Hover over a card to learn more about each member.
+        </p>
+        <div class="team-grid">
+
+        <div class="member-card reveal">
+            <div class="member-top">
+            <!-- <div class="member-photo"><span class="photo-placeholder">Insert Photo</span></div> -->
+            <div class="member-name">Reese</div>
+            <!-- <div class="member-role">Avery</div> -->
+            </div>
+            <div class="member-hover-info">
+            <span class="hover-label">About</span>
+            Passionate about global environmental issues and animal wellfare, as well as incorporating sustainability in daily life.
+            <ul>
+                <li>Environmental Advocate</li>
+                <li>Team planner</li>
+            </ul>
+            </div>
+        </div>
+
+        <div class="member-card reveal">
+            <div class="member-top">
+            <!-- <div class="member-photo"><span class="photo-placeholder">Insert Photo</span></div> -->
+            <div class="member-name">Ananya</div>
+            <!-- <div class="member-role">Avery</div> -->
+            </div>
+            <div class="member-hover-info">
+            <span class="hover-label">About</span>
+            Passionate about protecting the environment, especially raising awareness about how harmful chemicals like methylparabens in everyday products affect nature and human health. She is deeply concerned about the widespread use of plastic packaging.
+            <ul>
+                <li>Background in science research</li>
+                <li>Organises activities</li>
+            </ul>
+            </div>
+        </div>
+
+        <div class="member-card reveal">
+            <div class="member-top">
+            <!-- <div class="member-photo"><span class="photo-placeholder">Insert Photo</span></div> -->
+            <div class="member-name">Avery</div>
+            <!-- <div class="member-role">Avery</div> -->
+            </div>
+            <div class="member-hover-info">
+            <span class="hover-label">About</span>
+            Deeply interested in environmental issues, especially in challenging the misunderstandings that often surround them. She believes that meaningful change begins with helping people think more critically.
+            <ul>
+                <li>Background in science research</li>
+                <li>Team researcher</li>
+            </ul>
+            </div>
+        </div>
+
+        <div class="member-card reveal">
+            <div class="member-top">
+            <!-- <div class="member-photo"><span class="photo-placeholder">Insert Photo</span></div> -->
+            <div class="member-name">Jemma</div>
+            <!-- <div class="member-role">Avery</div> -->
+            </div>
+            <div class="member-hover-info">
+            <span class="hover-label">About</span>
+            Believes strongly in effective communication between our team and target audience to achieve our intended aim of educating the public on the hidden dangers of products.
+            <ul>
+                <li>Background in science research</li>
+                <li>Designs websites and publicity materials</li>
+            </ul>
+            </div>
+        </div>
+
+        </div>
+    </section>
+    </div>
+
+    <!-- ══════════════════ PROBLEM ══════════════════ -->
+    <div id="problem-wrap">
+    <section id="problem">
+        <span class="section-label reveal">05: The Problem</span>
+        <h2 class="reveal">Hidden in <em>Plain Sight</em></h2>
+        <div class="divider reveal"></div>
+        <p class="lead reveal">
+        As we consume more and more products, harmful chemicals have hidden themselves in small font 
+        behind long, unpronounceable names in ingredient lists; deliberately obscured from everyday consumers 
+        who trust the products they buy.
+        </p>
+        <div class="stat-box reveal">
+        <p class="stat-teaser">Think you know what's in your products? The truth may shock you.</p>
+        <button class="btn-reveal" onclick="revealStat()">⚡ Reveal Statistic</button>
+        <div class="stat-reveal" id="stat-reveal">
+            <div class="stat-number">84,000+</div>
+            <p class="stat-desc">
+            Over 84,000 chemicals are used in commercial products in the US alone,
+            and fewer than 1% have been tested for safety in humans.
+            </p>
+            <p class="stat-source">Source: Environmental Working Group (EWG) / US EPA Inventory</p>
+        </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- ══════════════════ FUTURE INITIATIVES ══════════════════ -->
+    <div id="initiatives-wrap">
+    <section id="initiatives">
+        <span class="section-label reveal">06: Future Initiatives</span>
+        <h2 class="reveal">Our <em>Roadmap</em></h2>
+        <div class="divider reveal"></div>
+        <p class="lead reveal">Three key activities we have planned to drive change. Click each one to learn more.</p>
+        <div class="timeline">
+
+        <div class="timeline-item reveal">
+            <div class="tl-dot">01</div>
+            <div class="tl-content">
+            <div class="tl-header">
+                <span class="tl-title">Hand Sanitiser Workshop (HUSH-STEM Week)</span>
+                <span class="tl-date">Phase 1</span>
+            </div>
+            <button class="btn-tl" onclick="toggleTL('tl1', this)">Learn More ↓</button>
+            <div class="tl-details" id="tl1">
+                Participants customise their very own essential oil and hand sanitizer as part of our workshop during HUSH-STEM Week. Learn what goes into your products through this hands-on experience!
+            </div>
+            </div>
+        </div>
+
+        <div class="timeline-item reveal">
+            <div class="tl-dot">02</div>
+            <div class="tl-content">
+            <div class="tl-header">
+                <span class="tl-title">Earth Week Booth</span>
+                <span class="tl-date">Phase 2</span>
+            </div>
+            <button class="btn-tl" onclick="toggleTL('tl2', this)">Learn More ↓</button>
+            <div class="tl-details" id="tl2">
+                Look forward to our booth during Earth Week (Organised by Congress AT5: Environment) where you can participate in quizzes and hands-on activities to learn more about product safety and how to spot dangerous chemicals in your everyday products!
+            </div>
+            </div>
+        </div>
+
+        <div class="timeline-item reveal">
+            <div class="tl-dot">03</div>
+            <div class="tl-content">
+            <div class="tl-header">
+                <span class="tl-title">Mailers and Future Events</span>
+                <span class="tl-date">Phase 3</span>
+            </div>
+            <button class="btn-tl" onclick="toggleTL('tl3', this)">Learn More ↓</button>
+            <div class="tl-details" id="tl3">
+                Remember to check your inboxes for our mailers which will contain useful information and events that you can take part in! We intend to conduct many events in the future in relation to our aims and objectives. Hope you're excited! 
+            </div>
+            </div>
+        </div>
+
+        </div>
+    </section>
+    </div>
+
+    <!-- ══════════════════ CONCLUSION ══════════════════ -->
+    <div id="conclusion-wrap">
+    <section id="conclusion">
+        <span class="section-label reveal">07: Closing</span>
+        <div class="thank-you">Thank You! 🌱</div>
+        <p class="conclusion-sub reveal">
+        We hope to see you at our initiatives! Remember to be a responsible consumer!
+        </p>
+        <button class="btn-primary reveal" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        Back to Top ↑
+        </button>
+        <p class="footer-note reveal">Project Supernatural &nbsp;·&nbsp; Environmental Awareness Initiative</p>
+    </section>
+    </div>
+
+  
+  <!-- ══════════════════ QUIZ OVERLAY ══════════════════ -->
+  <button class="quiz-close-btn" id="quiz-close-btn" onclick="closeQuiz()" title="Close Quiz">✕</button>
+  <div id="quiz-overlay">
+    <div style="min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:40px 20px 80px;">
+      <div class="quiz-header">
+        <div class="quiz-badge">🌿 Project Supernatural</div>
+        <h1>The <span>Conscious Consumer</span> Quiz</h1>
+        <p>Discover how aware you are of what's really in everyday products.</p>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-labels">
+          <span id="prog-label">Question 1 of 9</span>
+          <span id="prog-pts">0 pts</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Q1: Opening (no points) -->
+      <div class="q-card active" id="q1">
+        <span class="q-num">Question 1 of 9</span>
+        <div class="q-illustration">🌳</div>
+        <div class="q-title">It's a new day in the Great Forest!</div>
+        <div class="q-sub">Ready to begin your journey?</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q1',0,'a')"><span class="opt-letter">A</span> Let's go</div>
+          <div class="opt" onclick="selectOpt(this,'q1',0,'b')"><span class="opt-letter">B</span> Sure</div>
+          <div class="opt" onclick="selectOpt(this,'q1',0,'c')"><span class="opt-letter">C</span> I guess so</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q1-next" onclick="goNext('q2')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q2: Mysterious Potion -->
+      <div class="q-card" id="q2">
+        <span class="q-num">Question 2 of 9</span>
+        <div class="q-illustration">✨</div>
+        <div class="q-title">The Mysterious Potion</div>
+        <div class="q-sub">You find a glowing potion with a long list of ingredients, some are familiar, some not. What do you do?</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q2',0,'a')"><span class="opt-letter">A</span> You don't recognise most of it anyway, so you assume it's fine</div>
+          <div class="opt" onclick="selectOpt(this,'q2',5,'b')"><span class="opt-letter">B</span> You skim through but don't look too deeply</div>
+          <div class="opt" onclick="selectOpt(this,'q2',10,'c')"><span class="opt-letter">C</span> You try to understand what the unfamiliar ingredients are before deciding</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q2-next" onclick="goNext('q3')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q3: Forest Market -->
+      <div class="q-card" id="q3">
+        <span class="q-num">Question 3 of 9</span>
+        <div class="q-illustration">🛒</div>
+        <div class="q-title">The Forest Market</div>
+        <div class="q-sub">You see a shampoo labelled "100% natural" and "eco-friendly". What do you do?</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q3',0,'a')"><span class="opt-letter">A</span> Sounds good enough. You trust the label</div>
+          <div class="opt" onclick="selectOpt(this,'q3',5,'b')"><span class="opt-letter">B</span> You feel it's probably better, but don't check further</div>
+          <div class="opt" onclick="selectOpt(this,'q3',10,'c')"><span class="opt-letter">C</span> You've heard of greenwashing, so you check the ingredients or claims more carefully</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q3-next" onclick="goNext('q4')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q4: Scented Room -->
+      <div class="q-card" id="q4">
+        <span class="q-num">Question 4 of 9</span>
+        <div class="q-illustration">🕯️</div>
+        <div class="q-title">The Scented Room</div>
+        <div class="q-sub">You walk into a room filled with scented candles.</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q4',0,'a')"><span class="opt-letter">A</span> It smells nice! You don't think much about it</div>
+          <div class="opt" onclick="selectOpt(this,'q4',5,'b')"><span class="opt-letter">B</span> You've heard some things about scented products but aren't too concerned</div>
+          <div class="opt" onclick="selectOpt(this,'q4',10,'c')"><span class="opt-letter">C</span> You're aware they can release certain chemicals, so you're more cautious</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q4-next" onclick="goNext('q5')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q5: Cloak Shop -->
+      <div class="q-card" id="q5">
+        <span class="q-num">Question 5 of 9</span>
+        <div class="q-illustration">👗</div>
+        <div class="q-title">The Cloak Shop</div>
+        <div class="q-sub">You find a trendy cloak at a really cheap price. What do you do?</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q5',0,'a')"><span class="opt-letter">A</span> Buy it! It's stylish and affordable</div>
+          <div class="opt" onclick="selectOpt(this,'q5',5,'b')"><span class="opt-letter">B</span> You know fast fashion isn't great, but still consider it</div>
+          <div class="opt" onclick="selectOpt(this,'q5',10,'c')"><span class="opt-letter">C</span> You think about how it was made and whether it's sustainable before buying</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q5-next" onclick="goNext('q6')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q6: Packaging Stall -->
+      <div class="q-card" id="q6">
+        <span class="q-num">Question 6 of 9</span>
+        <div class="q-illustration">📦</div>
+        <div class="q-title">The Packaging Stall</div>
+        <div class="q-sub">You're choosing between two similar products: one has lots of packaging, the other is minimal.</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q6',0,'a')"><span class="opt-letter">A</span> You pick whichever is more appealing, packaging doesn't matter much</div>
+          <div class="opt" onclick="selectOpt(this,'q6',5,'b')"><span class="opt-letter">B</span> You notice the packaging but don't prioritise it</div>
+          <div class="opt" onclick="selectOpt(this,'q6',10,'c')"><span class="opt-letter">C</span> You try to choose the one with less or more sustainable packaging</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q6-next" onclick="goNext('q7')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q7: Perfume Merchant -->
+      <div class="q-card" id="q7">
+        <span class="q-num">Question 7 of 9</span>
+        <div class="q-illustration">🌸</div>
+        <div class="q-title">The Perfume Merchant</div>
+        <div class="q-sub">You see "fragrance" listed on a product.</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q7',0,'a')"><span class="opt-letter">A</span> It's common, so you don't question it</div>
+          <div class="opt" onclick="selectOpt(this,'q7',5,'b')"><span class="opt-letter">B</span> You've heard it's vague, but aren't too sure why</div>
+          <div class="opt" onclick="selectOpt(this,'q7',10,'c')"><span class="opt-letter">C</span> You know it can hide multiple chemicals and take that into consideration</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q7-next" onclick="goNext('q8')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q8: Quick Choice -->
+      <div class="q-card" id="q8">
+        <span class="q-num">Question 8 of 9</span>
+        <div class="q-illustration">⚡</div>
+        <div class="q-title">The Quick Choice</div>
+        <div class="q-sub">You're in a rush to grab something.</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q8',0,'a')"><span class="opt-letter">A</span> You just take what's familiar or convenient</div>
+          <div class="opt" onclick="selectOpt(this,'q8',5,'b')"><span class="opt-letter">B</span> You sometimes think about it, but not always</div>
+          <div class="opt" onclick="selectOpt(this,'q8',10,'c')"><span class="opt-letter">C</span> You still try to make a more informed choice if possible</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q8-next" onclick="goNext('q9')" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- Q9: Final Reflection -->
+      <div class="q-card" id="q9">
+        <span class="q-num">Question 9 of 9</span>
+        <div class="q-illustration">🧠</div>
+        <div class="q-title">Final Reflection</div>
+        <div class="q-sub">When it comes to everyday products…</div>
+        <div class="options">
+          <div class="opt" onclick="selectOpt(this,'q9',0,'a')"><span class="opt-letter">A</span> You usually don't think much about them</div>
+          <div class="opt" onclick="selectOpt(this,'q9',5,'b')"><span class="opt-letter">B</span> You think about them sometimes</div>
+          <div class="opt" onclick="selectOpt(this,'q9',10,'c')"><span class="opt-letter">C</span> You actively try to be aware of what you use and its impact</div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-next" id="q9-next" onclick="showScore()" disabled>See My Results 🎉</button>
+        </div>
+      </div>
+
+      <!-- SCORE CARD -->
+      <div id="score-card">
+        <span class="score-emoji" id="score-emoji"></span>
+        <div class="score-title" id="score-title"></div>
+        <div class="score-pts" id="score-pts"></div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar" style="width:0%"></div></div>
+        </div>
+        <div class="score-desc" id="score-desc"></div>
+        <button class="btn-restart" onclick="restartQuiz()">Try Again 🔄</button>
+      </div>
+
+      <div class="confetti-wrap" id="confetti"></div>
+    </div>
+  </div>
+
+
+    <script>
+
+    /* ── PARTICLES ── */
+    (function() {
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 55; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle' + (Math.random() > 0.75 ? ' large' : '');
+        const size = Math.random() * 10 + 3;
+        p.style.cssText = `
+            width:${size}px; height:${size}px;
+            left:${Math.random()*100}%;
+            animation-duration:${Math.random()*14+7}s;
+            animation-delay:${Math.random()*12}s;
+            filter: blur(${Math.random()*1.5}px);
+        `;
+        container.appendChild(p);
+        }
+    })();
+
+    /* ── SCROLL REVEAL ── */
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('visible'), i * 80);
+            observer.unobserve(e.target);
+        }
+        });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── COUNT-UP ANIMATION ── */
+    function animateCount(el, target, suffix) {
+        let start = 0;
+        const step = Math.ceil(target / 60);
+        const timer = setInterval(() => {
+        start += step;
+        if (start >= target) { el.textContent = target.toLocaleString() + (suffix||''); clearInterval(timer); }
+        else { el.textContent = start.toLocaleString() + (suffix||''); }
+        }, 28);
+    }
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+        if (e.isIntersecting) {
+            document.querySelectorAll('.hstat-num[data-target]').forEach(el => {
+            animateCount(el, parseInt(el.dataset.target), el.dataset.suffix || '');
+            });
+            statsObserver.disconnect();
+        }
+        });
+    }, { threshold: 0.5 });
+    const statsEl = document.querySelector('.hero-stats');
+    if (statsEl) statsObserver.observe(statsEl);
+
+    /* ── STAT REVEAL ── */
+    function revealStat() {
+        document.getElementById('stat-reveal').classList.add('visible');
+        document.querySelector('.btn-reveal').style.display = 'none';
+    }
+
+    /* ── TAG DEFINITIONS ── */
+    const defs = {
+        chem: {
+        icon: '🧪',
+        title: 'Chemical Transparency',
+        body: 'The practice of openly disclosing every ingredient in a product — using clear, everyday language rather than obscure scientific aliases. It means consumers can make truly informed choices about what they put on, or in, their bodies.'
+        },
+        eco: {
+        icon: '♻️',
+        title: 'Eco-Friendly Choices',
+        body: 'Selecting products and habits that minimise harm to the natural environment — from choosing biodegradable packaging and sustainably sourced ingredients, to avoiding chemicals that persist in waterways and soil long after disposal.'
+        },
+        safety: {
+        icon: '🛡️',
+        title: 'Consumer Safety',
+        body: 'The right of every person to use products without risk of harm from hidden toxic substances. This includes proper regulation, honest labelling, and holding manufacturers accountable when ingredients are linked to health concerns.'
+        },
+        ethical: {
+        icon: '🌍',
+        title: 'Ethical Products',
+        body: 'Goods produced with integrity — free from exploitative labour, animal cruelty, and environmental damage. Ethical products are not only safe for the individual but considerate of the communities and ecosystems involved in their creation.'
+        }
+    };
+
+    function openDef(key) {
+        const d = defs[key];
+        document.getElementById('def-icon').textContent = d.icon;
+        document.getElementById('def-title').textContent = d.title;
+        document.getElementById('def-body').textContent = d.body;
+        document.getElementById('def-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDef(e, force) {
+        if (force || (e && e.target === document.getElementById('def-modal'))) {
+        document.getElementById('def-modal').classList.remove('open');
+        document.body.style.overflow = '';
+        }
+    }
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closeDef(null,true); });
+
+    /* ── TIMELINE TOGGLE ── */
+    function toggleTL(id, btn) {
+        const el = document.getElementById(id);
+        const isOpen = el.classList.contains('visible');
+        el.classList.toggle('visible');
+        btn.textContent = isOpen ? 'Learn More ↓' : 'Close ↑';
+    }
+
+  
+  /* ── QUIZ FUNCTIONS ── */
+  let totalPts = 0;
+  const selected = {};
+  const qOrder = ['q1','q2','q3','q4','q5','q6','q7','q8','q9'];
+  const TOTAL_QS = 9;
+  const MAX_PTS = 80; // Q1 has 0 pts max, Qs 2-9 each max 10 = 80
+
+  function selectOpt(el, qid, pts, key) {
+    const opts = el.parentElement.querySelectorAll('.opt');
+    opts.forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selected[qid] = { pts, key };
+    const nextBtn = document.getElementById(qid + '-next');
+    if (nextBtn) nextBtn.disabled = false;
+  }
+
+  function updateProgress() {
+    const current = document.querySelector('.q-card.active');
+    const idx = current ? qOrder.indexOf(current.id) : TOTAL_QS - 1;
+    const pct = (idx / TOTAL_QS) * 100;
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (idx + 1) + ' of ' + TOTAL_QS;
+    document.getElementById('prog-pts').textContent = totalPts + ' pts';
+  }
+
+  function goNext(targetId) {
+    if (selected[document.querySelector('.q-card.active').id]) {
+      totalPts += selected[document.querySelector('.q-card.active').id].pts;
+      selected[document.querySelector('.q-card.active').id].counted = true;
+    }
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
+    document.getElementById(targetId).classList.add('active');
+    updateProgress();
+    document.getElementById('quiz-overlay').scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function showScore() {
+    // count last question pts
+    const lastQ = document.querySelector('.q-card.active');
+    if (lastQ && selected[lastQ.id] && !selected[lastQ.id].counted) {
+      totalPts += selected[lastQ.id].pts;
+      selected[lastQ.id].counted = true;
+    }
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('score-card').style.display = 'block';
+    document.getElementById('prog-fill').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Complete!';
+    document.getElementById('prog-pts').textContent = totalPts + ' pts';
+
+    let emoji, title, desc;
+    if (totalPts <= 30) {
+      emoji = '🌱'; title = 'The Unaware Explorer';
+      desc = 'You go with what\'s familiar — and that\'s okay! This is your starting point. The Great Forest has much to reveal. Explore Project Supernatural to discover what\'s really hiding in everyday products.';
+    } else if (totalPts <= 65) {
+      emoji = '🌿'; title = 'The Curious Thinker';
+      desc = 'You\'ve started questioning things, but there\'s more to uncover. You\'re on the right path — keep asking questions and digging deeper into what you consume and use.';
+    } else {
+      emoji = '🌟'; title = 'The Conscious Consumer';
+      desc = 'You\'re mindful, informed, and aware of your impact. You think critically about the products around you and make intentional choices. The forest is proud of you!';
+    }
+
+    document.getElementById('score-emoji').textContent = emoji;
+    document.getElementById('score-title').textContent = title;
+    document.getElementById('score-pts').textContent = totalPts + ' / ' + MAX_PTS + ' points';
+    document.getElementById('score-desc').textContent = desc;
+
+    setTimeout(() => {
+      document.getElementById('score-bar').style.width = (totalPts / MAX_PTS * 100) + '%';
+    }, 200);
+
+    if (totalPts >= 70) launchConfetti();
+    document.getElementById('quiz-overlay').scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function launchConfetti() {
+    const wrap = document.getElementById('confetti');
+    wrap.innerHTML = '';
+    const colours = ['#2ecc71','#a8f0c0','#fff','#f9ca24','#6ab04c'];
+    for (let i = 0; i < 80; i++) {
+      const b = document.createElement('div');
+      b.className = 'blob';
+      const size = Math.random() * 14 + 6;
+      b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colours[Math.floor(Math.random()*colours.length)]};opacity:${Math.random()*0.7+0.3};animation-duration:${Math.random()*2+1.5}s;animation-delay:${Math.random()*1}s;`;
+      wrap.appendChild(b);
+    }
+    setTimeout(() => wrap.innerHTML = '', 4000);
+  }
+
+  function restartQuiz() {
+    totalPts = 0;
+    Object.keys(selected).forEach(k => delete selected[k]);
+    document.getElementById('score-card').style.display = 'none';
+    document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected','correct','wrong'));
+    document.querySelectorAll('.btn-next').forEach(b => { b.disabled = true; b.style.display = ''; });
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('q1').classList.add('active');
+    updateProgress();
+    document.getElementById('quiz-overlay').scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function openQuiz() {
+    document.getElementById('quiz-overlay').classList.add('open');
+    document.getElementById('quiz-close-btn').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeQuiz() {
+    document.getElementById('quiz-overlay').classList.remove('open');
+    document.getElementById('quiz-close-btn').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-next').forEach(b => b.disabled = true);
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('q1').classList.add('active');
+    updateProgress();
+  });
+
+    </script>
+
+    </body>
+    </html>
+
+
